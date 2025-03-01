@@ -29,7 +29,7 @@ func (p *SendMessageCmd) SetFlags(f *flag.FlagSet) {
 
 func (p *SendMessageCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	f.Parse(f.Args())
-	p2p.SendMessageToPeer(p.host, p.port, f.Arg(0))
+	p2p.SendMessageToServer(p.host, p.port, f.Arg(0))
 	fmt.Println()
 	return subcommands.ExitSuccess
 }

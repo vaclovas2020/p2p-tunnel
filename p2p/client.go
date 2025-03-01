@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func SendMessageToPeer(host string, port int, message string) {
+func SendMessageToServer(host string, port int, message string) {
 	// Load client's certificate and key
 	clientCert, err := tls.LoadX509KeyPair("client.crt", "client.key")
 	if err != nil {
