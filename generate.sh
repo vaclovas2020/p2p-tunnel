@@ -1,10 +1,3 @@
-# P2P tunnel
-
-A P2P tunnel for secure bidirectional communication between two or more P2P nodes
-
-
-First apply these commands
-```
 # Generate CA key and certificate
 openssl genrsa -out ca.key 2048
 openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.crt
@@ -20,7 +13,3 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out s
 openssl genrsa -out client.key 2048
 openssl req -new -key client.key -out client.csr
 openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -days 3650 -sha256
-
-```
-
-OR just execute `generate.sh`

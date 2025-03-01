@@ -2,3 +2,11 @@ server.crt
 server.csr
 server.key
 openssl.cnf
+ca.crt
+ca.key
+.gitignore
+ca.srl
+.gitignore
+client.crt
+client.csr
+client.key
