@@ -7,14 +7,8 @@ import (
 )
 
 func SendMessageToPeer(host string, port int, message string) {
-	cert, err := tls.LoadX509KeyPair("server.crt", "server.key")
-	if err != nil {
-		log.Fatal("Error loading certificate:", err)
-	}
-
 	config := &tls.Config{
-		Certificates: []tls.Certificate{cert},
-		ServerName:   host,
+		InsecureSkipVerify: true,
 	}
 
 	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", host, port), config)
