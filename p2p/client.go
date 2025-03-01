@@ -44,7 +44,13 @@ func SendMessageToServer(host string, port int, message string) {
 
 	for i := range 5 {
 		sendMessageClient(conn, fmt.Sprintf("%d:%s", i, message))
-		req, _ := receiveMessageClient(conn)
+		req, err := receiveMessageClient(conn)
+
+		if err == io.EOF {
+			fmt.Println("Connection closed by the client (EOF detected)")
+			return
+		}
+
 		message = req
 	}
 }
@@ -53,11 +59,6 @@ func receiveMessageClient(conn *tls.Conn) (string, error) {
 	reqbuff := make([]byte, 1024)
 	n, err := conn.Read(reqbuff)
 	if err != nil {
-		if err == io.EOF {
-			fmt.Println("Connection closed by the server (EOF detected)")
-			return "", nil // Return empty string and nil error to indicate EOF
-		}
-		fmt.Println("Error reading data:", err)
 		return "", err
 	}
 

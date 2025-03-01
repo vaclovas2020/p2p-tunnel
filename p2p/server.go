@@ -64,7 +64,12 @@ func handleConnection(conn net.Conn) {
 	fmt.Println("New secure connection established")
 
 	for {
-		req, _ := receiveMessageServer(conn)
+		req, err := receiveMessageServer(conn)
+		if err == io.EOF {
+			fmt.Println("Connection closed by the client (EOF detected)")
+			return
+		}
+
 		sendMessageServer(conn, fmt.Sprintf("echo %s", req))
 	}
 }
@@ -73,11 +78,6 @@ func receiveMessageServer(conn net.Conn) (string, error) {
 	reqbuff := make([]byte, 1024)
 	n, err := conn.Read(reqbuff)
 	if err != nil {
-		if err == io.EOF {
-			fmt.Println("Connection closed by the client (EOF detected)")
-			return "", nil // Return empty string and nil error to indicate EOF
-		}
-		fmt.Println("Error reading data:", err)
 		return "", err
 	}
 
