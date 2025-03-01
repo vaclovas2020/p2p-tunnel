@@ -13,7 +13,8 @@ func main() {
 	subcommands.Register(subcommands.HelpCommand(), "common")
 	subcommands.Register(subcommands.FlagsCommand(), "common")
 	subcommands.Register(subcommands.CommandsCommand(), "common")
-	subcommands.Register(&cmd.RunTunnel{}, "p2p-client")
+	subcommands.Register(&cmd.StartServerCmd{}, "p2p")
+	subcommands.Register(&cmd.SendMessageCmd{}, "p2p")
 
 	flag.Parse()
 	ctx := context.Background()
