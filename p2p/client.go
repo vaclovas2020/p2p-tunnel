@@ -42,8 +42,8 @@ func SendMessageToServer(host string, port int, message string) {
 
 	defer conn.Close()
 
-	for {
-		sendMessageClient(conn, message)
+	for i := range 5 {
+		sendMessageClient(conn, fmt.Sprintf("%d:%s", i, message))
 		req, _ := receiveMessageClient(conn)
 		message = req
 	}
