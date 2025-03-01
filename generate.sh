@@ -3,6 +3,7 @@
 # === CONFIGURATION ===
 CA_CN="MyCA"
 SERVER_CN="myserver.com"
+SERVER_IP="192.168.1.101"
 CLIENT_CN="myclient.com"
 CLIENT_IP="192.168.1.100"
 
@@ -32,7 +33,8 @@ subjectAltName = @alt_names
 [ alt_names ]
 DNS.1 = $SERVER_CN
 DNS.2 = localhost
-IP.1  = 127.0.0.1
+IP.1  = $SERVER_IP
+IP.2  = 127.0.0.1
 EOF
 
 # Step 3: Generate server key and CSR
@@ -64,7 +66,9 @@ subjectAltName = @alt_names
 
 [ alt_names ]
 DNS.1 = $CLIENT_CN
+DNS.2 = localhost
 IP.1  = $CLIENT_IP
+IP.2  = 127.0.0.1
 EOF
 
 # Step 6: Generate client key and CSR
