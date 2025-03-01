@@ -37,7 +37,7 @@ func SendMessageToServer(host string, port int, message string) {
 	// Establish a secure TLS connection
 	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", host, port), config)
 	if err != nil {
-		log.Fatal("Error connecting to p2p peer:", err)
+		log.Fatal("Error connecting to p2p server:", err)
 	}
 
 	defer conn.Close()
