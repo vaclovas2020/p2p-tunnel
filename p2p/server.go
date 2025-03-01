@@ -61,12 +61,21 @@ func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	fmt.Println("New secure connection established")
 
-	buffer := make([]byte, 1024)
-	n, err := conn.Read(buffer)
+	reqbuff := make([]byte, 1024)
+	n, err := conn.Read(reqbuff)
 	if err != nil {
 		fmt.Println("Error reading data:", err)
 		return
 	}
 
-	fmt.Println("Received message:", string(buffer[:n]))
+	fmt.Println("Received message:", string(reqbuff[:n]))
+
+	resbuff := make([]byte, 1024)
+	n, err = conn.Write(resbuff)
+	if err != nil {
+		fmt.Println("Error writing data:", err)
+		return
+	}
+
+	fmt.Println("Writed message:", string(resbuff[:n]))
 }

@@ -47,4 +47,14 @@ func SendMessageToPeer(host string, port int, message string) {
 	}
 
 	fmt.Println("Message sent:", message)
+
+	// Received message
+	resbuff := make([]byte, 1024)
+	n, err := conn.Read(resbuff)
+	if err != nil {
+		fmt.Println("Error reading data:", err)
+		return
+	}
+
+	fmt.Println("Received message:", string(resbuff[:n]))
 }
