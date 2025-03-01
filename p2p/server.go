@@ -40,18 +40,21 @@ func StartServer(port int) {
 	}
 
 	ln, err := tls.Listen("tcp", fmt.Sprintf(":%d", port), config)
+
 	if err != nil {
 		fmt.Println("Error listening:", err)
 		os.Exit(1)
 	}
+
 	defer ln.Close()
 
 	fmt.Printf("Listening on port %d...\n", port)
 
 	for {
 		conn, err := ln.Accept()
+
 		if err != nil {
-			fmt.Println("Error accepting connection:", err)
+			log.Println("Error accepting connection:", err)
 			continue
 		}
 
@@ -61,12 +64,12 @@ func StartServer(port int) {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	fmt.Println("New secure connection established")
+	log.Println("New secure connection established", conn.LocalAddr().String())
 
 	for {
 		req, err := receiveMessageServer(conn)
 		if err == io.EOF {
-			fmt.Println("Connection closed by the client (EOF detected)")
+			log.Println("Connection closed by the client (EOF detected)")
 			return
 		}
 
@@ -82,7 +85,8 @@ func receiveMessageServer(conn net.Conn) (string, error) {
 	}
 
 	reqStr := string(reqbuff[:n])
-	fmt.Println("Received message:", reqStr)
+
+	log.Println("Received message:", reqStr)
 
 	return reqStr, nil
 }
@@ -90,9 +94,10 @@ func receiveMessageServer(conn net.Conn) (string, error) {
 func sendMessageServer(conn net.Conn, message string) {
 	// Send message
 	_, err := conn.Write([]byte(message))
+
 	if err != nil {
 		log.Fatal("Error sending message:", err)
 	}
 
-	fmt.Println("Message sent:", message)
+	log.Println("Message sent:", message)
 }

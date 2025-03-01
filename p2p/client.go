@@ -36,8 +36,9 @@ func SendMessageToServer(host string, port int, message string) {
 
 	// Establish a secure TLS connection
 	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", host, port), config)
+
 	if err != nil {
-		log.Fatal("Error connecting to p2p server:", err)
+		log.Fatal("Error connecting to server:", err)
 	}
 
 	defer conn.Close()
@@ -47,7 +48,7 @@ func SendMessageToServer(host string, port int, message string) {
 		req, err := receiveMessageClient(conn)
 
 		if err == io.EOF {
-			fmt.Println("Connection closed by the client (EOF detected)")
+			log.Println("Connection closed by the server (EOF detected)")
 			return
 		}
 
@@ -57,13 +58,16 @@ func SendMessageToServer(host string, port int, message string) {
 
 func receiveMessageClient(conn *tls.Conn) (string, error) {
 	reqbuff := make([]byte, 1024)
+
 	n, err := conn.Read(reqbuff)
+
 	if err != nil {
 		return "", err
 	}
 
 	reqStr := string(reqbuff[:n])
-	fmt.Println("Received message:", reqStr)
+
+	log.Println("Received message:", reqStr)
 
 	return reqStr, nil
 }
@@ -75,5 +79,5 @@ func sendMessageClient(conn *tls.Conn, message string) {
 		log.Fatal("Error sending message:", err)
 	}
 
-	fmt.Println("Message sent:", message)
+	log.Println("Message sent:", message)
 }
