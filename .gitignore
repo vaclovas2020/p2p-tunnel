@@ -10,3 +10,7 @@ ca.srl
 client.crt
 client.csr
 client.key
+san.cnf
+client_san.cnf
+generate-live.sh
+server_san.cnf
