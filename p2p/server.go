@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -72,13 +73,16 @@ func receiveMessageServer(conn net.Conn) (string, error) {
 	reqbuff := make([]byte, 1024)
 	n, err := conn.Read(reqbuff)
 	if err != nil {
+		if err == io.EOF {
+			fmt.Println("Connection closed by the client (EOF detected)")
+			return "", nil // Return empty string and nil error to indicate EOF
+		}
 		fmt.Println("Error reading data:", err)
 		return "", err
 	}
 
 	reqStr := string(reqbuff[:n])
-
-	fmt.Println("Received sent:", reqStr)
+	fmt.Println("Received message:", reqStr)
 
 	return reqStr, nil
 }
