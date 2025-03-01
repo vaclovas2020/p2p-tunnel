@@ -38,23 +38,37 @@ func SendMessageToPeer(host string, port int, message string) {
 	if err != nil {
 		log.Fatal("Error connecting to p2p peer:", err)
 	}
+
 	defer conn.Close()
 
+	for {
+		sendMessageClient(conn, message)
+		req, _ := receiveMessageClient(conn)
+		message = req
+	}
+}
+
+func receiveMessageClient(conn *tls.Conn) (string, error) {
+	reqbuff := make([]byte, 1024)
+	n, err := conn.Read(reqbuff)
+	if err != nil {
+		fmt.Println("Error reading data:", err)
+		return "", err
+	}
+
+	reqStr := string(reqbuff[:n])
+
+	fmt.Println("Received sent:", reqStr)
+
+	return reqStr, nil
+}
+
+func sendMessageClient(conn *tls.Conn, message string) {
 	// Send message
-	_, err = conn.Write([]byte(message))
+	_, err := conn.Write([]byte(message))
 	if err != nil {
 		log.Fatal("Error sending message:", err)
 	}
 
 	fmt.Println("Message sent:", message)
-
-	// Received message
-	resbuff := make([]byte, 1024)
-	n, err := conn.Read(resbuff)
-	if err != nil {
-		fmt.Println("Error reading data:", err)
-		return
-	}
-
-	fmt.Println("Received message:", string(resbuff[:n]))
 }

@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"log"
 	"net"
 	"os"
 )
@@ -61,21 +62,33 @@ func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	fmt.Println("New secure connection established")
 
+	for {
+		req, _ := receiveMessageServer(conn)
+		sendMessageServer(conn, fmt.Sprintf("echo %s", req))
+	}
+}
+
+func receiveMessageServer(conn net.Conn) (string, error) {
 	reqbuff := make([]byte, 1024)
 	n, err := conn.Read(reqbuff)
 	if err != nil {
 		fmt.Println("Error reading data:", err)
-		return
+		return "", err
 	}
 
-	fmt.Println("Received message:", string(reqbuff[:n]))
+	reqStr := string(reqbuff[:n])
 
-	resbuff := make([]byte, 1024)
-	n, err = conn.Write(resbuff)
+	fmt.Println("Received sent:", reqStr)
+
+	return reqStr, nil
+}
+
+func sendMessageServer(conn net.Conn, message string) {
+	// Send message
+	_, err := conn.Write([]byte(message))
 	if err != nil {
-		fmt.Println("Error writing data:", err)
-		return
+		log.Fatal("Error sending message:", err)
 	}
 
-	fmt.Println("Writed message:", string(resbuff[:n]))
+	fmt.Println("Message sent:", message)
 }
