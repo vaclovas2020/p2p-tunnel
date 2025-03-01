@@ -14,14 +14,14 @@ func StartServer(port int) {
 	// Load server certificate
 	cert, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
-		fmt.Println("Error loading server certificate:", err)
+		log.Println("Error loading server certificate:", err)
 		os.Exit(1)
 	}
 
 	// Load CA certificate to verify client certificates
 	caCert, err := os.ReadFile("ca.crt")
 	if err != nil {
-		fmt.Println("Error reading CA certificate:", err)
+		log.Println("Error reading CA certificate:", err)
 		os.Exit(1)
 	}
 
@@ -42,13 +42,13 @@ func StartServer(port int) {
 	ln, err := tls.Listen("tcp", fmt.Sprintf(":%d", port), config)
 
 	if err != nil {
-		fmt.Println("Error listening:", err)
+		log.Println("Error listening:", err)
 		os.Exit(1)
 	}
 
 	defer ln.Close()
 
-	fmt.Printf("Listening on port %d...\n", port)
+	log.Printf("Listening on port %d...\n", port)
 
 	for {
 		conn, err := ln.Accept()
