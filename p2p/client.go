@@ -42,12 +42,16 @@ func SendMessageToServer(host string, port int, message string) {
 	}
 
 	defer func() {
-		log.Println("Secure Connection closed", conn.RemoteAddr().String())
+		log.Printf("Secure Connection closed (remote: %s, local: %s)",
+			conn.RemoteAddr().String(),
+			conn.LocalAddr().String())
 
 		conn.Close()
 	}()
 
-	log.Println("New secure connection established", conn.RemoteAddr().String())
+	log.Printf("New secure connection established (remote: %s, local: %s)",
+		conn.RemoteAddr().String(),
+		conn.LocalAddr().String())
 
 	for i := range 5 {
 		sendMessageClient(conn, fmt.Sprintf("%d:%s", i, message))

@@ -64,12 +64,16 @@ func StartServer(port int) {
 
 func handleConnection(conn net.Conn) {
 	defer func() {
-		log.Println("Secure Connection closed", conn.RemoteAddr().String())
+		log.Printf("Secure Connection closed (remote: %s, local: %s)",
+			conn.RemoteAddr().String(),
+			conn.LocalAddr().String())
 
 		conn.Close()
 	}()
 
-	log.Println("New secure connection established", conn.RemoteAddr().String())
+	log.Printf("New secure connection established (remote: %s, local: %s)",
+		conn.RemoteAddr().String(),
+		conn.LocalAddr().String())
 
 	for {
 		req, err := receiveMessageServer(conn)
