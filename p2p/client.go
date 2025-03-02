@@ -49,47 +49,43 @@ func SendMessageToServer(host string, port int, message string) {
 
 	logClient(conn, "New secure connection established")
 
-	for i := range 5 {
-		err := sendMessageClient(conn, fmt.Sprintf("%d:%s", i, message))
+	err = sendMessageClient(conn, message)
 
-		if err != nil {
-			logClient(conn, fmt.Sprintln("Write error:", err))
+	if err != nil {
+		logClient(conn, fmt.Sprintln("Write error:", err))
 
-			return
-		}
+		return
+	}
 
-		req, err := receiveMessageClient(conn)
+	_, err = receiveMessageClient(conn)
 
-		if err == io.EOF {
-			logClient(conn, "Connection closed by the server (EOF detected)")
+	if err == io.EOF {
+		logClient(conn, "Connection closed by the server (EOF detected)")
 
-			return
-		}
+		return
+	}
 
-		if err != nil {
-			logClient(conn, fmt.Sprintln("Read error:", err))
+	if err != nil {
+		logClient(conn, fmt.Sprintln("Read error:", err))
 
-			return
-		}
-
-		message = req
+		return
 	}
 }
 
 func receiveMessageClient(conn *tls.Conn) (string, error) {
-	reqbuff := make([]byte, 1024)
+	resbuff := make([]byte, 1024)
 
-	n, err := conn.Read(reqbuff)
+	n, err := conn.Read(resbuff)
 
 	if err != nil {
 		return "", err
 	}
 
-	reqStr := string(reqbuff[:n])
+	resStr := string(resbuff[:n])
 
-	logClient(conn, fmt.Sprintln("Received message:", reqStr))
+	logClient(conn, fmt.Sprintln("Received message:", resStr))
 
-	return reqStr, nil
+	return resStr, nil
 }
 
 func sendMessageClient(conn *tls.Conn, message string) error {
