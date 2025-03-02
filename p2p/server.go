@@ -64,25 +64,34 @@ func StartServer(port int) {
 
 func handleConnection(conn net.Conn) {
 	defer func() {
-		log.Printf("Secure Connection closed (remote: %s, local: %s)",
-			conn.RemoteAddr().String(),
-			conn.LocalAddr().String())
+		logServer(conn, "Secure Connection closed")
 
 		conn.Close()
 	}()
 
-	log.Printf("New secure connection established (remote: %s, local: %s)",
-		conn.RemoteAddr().String(),
-		conn.LocalAddr().String())
+	logServer(conn, "New secure connection established")
 
 	for {
 		req, err := receiveMessageServer(conn)
+
 		if err == io.EOF {
-			log.Println("Connection closed by the client (EOF detected)")
+			logServer(conn, "Connection closed by the client (EOF detected)")
 			return
 		}
 
-		sendMessageServer(conn, fmt.Sprintf("echo %s", req))
+		if err != nil {
+			logServer(conn, fmt.Sprintln("Read error:", err))
+
+			return
+		}
+
+		err = sendMessageServer(conn, fmt.Sprintf("echo %s", req))
+
+		if err != nil {
+			logServer(conn, fmt.Sprintln("Write error:", err))
+
+			return
+		}
 	}
 }
 
@@ -95,18 +104,20 @@ func receiveMessageServer(conn net.Conn) (string, error) {
 
 	reqStr := string(reqbuff[:n])
 
-	log.Println("Received message:", reqStr)
+	logServer(conn, fmt.Sprintln("Received message:", reqStr))
 
 	return reqStr, nil
 }
 
-func sendMessageServer(conn net.Conn, message string) {
+func sendMessageServer(conn net.Conn, message string) error {
 	// Send message
 	_, err := conn.Write([]byte(message))
 
 	if err != nil {
-		log.Fatal("Error sending message:", err)
+		return err
 	}
 
-	log.Println("Message sent:", message)
+	logServer(conn, fmt.Sprintln("Message sent:", message))
+
+	return nil
 }
