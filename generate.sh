@@ -8,13 +8,13 @@ CLIENT_CN="myclient.com"
 CLIENT_IP="192.168.1.100"
 
 # Step 1: Generate CA key and self-signed certificate
-openssl genrsa -out ca.key 2048
+openssl genrsa -out ca.key 4096
 openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.crt -subj "/C=US/ST=MyState/L=MyCity/O=MyOrganization/CN=$CA_CN"
 
 # Step 2: Create a server SAN config file
 cat > server_san.cnf <<EOF
 [ req ]
-default_bits       = 2048
+default_bits       = 4096
 prompt            = no
 default_md        = sha256
 distinguished_name = req_distinguished_name
@@ -38,7 +38,7 @@ IP.2  = 127.0.0.1
 EOF
 
 # Step 3: Generate server key and CSR
-openssl genrsa -out server.key 2048
+openssl genrsa -out server.key 4096
 openssl req -new -key server.key -out server.csr -config server_san.cnf
 
 # Step 4: Sign the server certificate with the CA
@@ -48,7 +48,7 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
 # Step 5: Create a client SAN config file
 cat > client_san.cnf <<EOF
 [ req ]
-default_bits       = 2048
+default_bits       = 4096
 prompt            = no
 default_md        = sha256
 distinguished_name = req_distinguished_name
@@ -72,7 +72,7 @@ IP.2  = 127.0.0.1
 EOF
 
 # Step 6: Generate client key and CSR
-openssl genrsa -out client.key 2048
+openssl genrsa -out client.key 4096
 openssl req -new -key client.key -out client.csr -config client_san.cnf
 
 # Step 7: Sign the client certificate with the CA
