@@ -14,3 +14,4 @@ san.cnf
 client_san.cnf
 generate-live.sh
 server_san.cnf
+internal
