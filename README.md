@@ -14,10 +14,10 @@ Finally, execute `generate-live.sh`
 
 ## Server side TLS configuration
 
-`cp generate-server.example.sh generate-live.sh && chmod +x generate-live.sh`
+`cp generate-server.example.sh generate-live-server.sh && chmod +xgenerate-live-server.sh`
 
-Make modifications on file `generate-live.sh` 
+Make modifications on file `generate-live-server.sh` 
 
-File `generate-live.sh` added to .gitignore for security reasons.
+File `generate-live-server.sh` added to .gitignore for security reasons.
 
-Finally, execute `generate-live.sh`
+Finally, execute `generate-live-server.sh`
