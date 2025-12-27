@@ -1,2 +1,9 @@
 generate-live.sh
 generate-live-server.sh
+ca.crt
+ca.key
+ca.srl
+server_san.cnf
+server.crt
+server.csr
+server.key
