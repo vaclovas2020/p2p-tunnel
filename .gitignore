@@ -11,3 +11,4 @@ client_san.cnf
 client.crt
 client.csr
 client.key
+p2p-tunnel
