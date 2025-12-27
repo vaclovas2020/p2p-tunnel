@@ -14,7 +14,7 @@ Finally, execute `generate-live.sh`
 
 ## Server side TLS configuration
 
-`cp generate-server.example.sh generate-live-server.sh && chmod +xgenerate-live-server.sh`
+`cp generate-server.example.sh generate-live-server.sh && chmod +x generate-live-server.sh`
 
 Make modifications on file `generate-live-server.sh` 
 
