@@ -7,3 +7,7 @@ server_san.cnf
 server.crt
 server.csr
 server.key
+client_san.cnf
+client.crt
+client.csr
+client.key
